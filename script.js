@@ -36,6 +36,18 @@ function initializeCharacterGrid() {
     });
 }
 
+// Function to highlight the character selection area
+function highlightCharacterSelection() {
+    const characterSelect = document.querySelector('.character-select h2');
+    characterSelect.classList.add('highlight-select');
+}
+
+// Function to remove the highlight
+function removeHighlight() {
+    const characterSelect = document.querySelector('.character-select h2');
+    characterSelect.classList.remove('highlight-select');
+}
+
 // Select a character and update the display
 function selectCharacter(character) {
     selectedCharacter = character;
@@ -58,6 +70,9 @@ function selectCharacter(character) {
 
     // Update statistics
     updateStatistics(character);
+
+    // Remove highlight after selection
+    removeHighlight();
 }
 
 // Calculate and display statistics
@@ -305,6 +320,9 @@ function updateGameStats() {
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     initializeCharacterGrid();
+    
+    // Highlight character selection on load
+    highlightCharacterSelection();
     
     document.getElementById('simulate-btn').onclick = () => {
         const numRolls = parseInt(document.getElementById('num-rolls').value);

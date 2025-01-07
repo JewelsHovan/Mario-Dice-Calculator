@@ -19,6 +19,9 @@
             <div class="dice-display">
                 <h2>Character Dice</h2>
                 <div id="dice-values"></div>
+                <div class="dice-info">
+                    <p>Note: Negative numbers indicate coin loss and are treated as 0 movement in calculations.</p>
+                </div>
             </div>
 
             <div class="statistics">
@@ -43,7 +46,7 @@
             <h2>Simulation</h2>
             <div class="simulation-controls">
                 <label for="num-rolls">Number of Rolls:</label>
-                <input type="number" id="num-rolls" value="100" min="1" max="10000">
+                <input type="number" id="num-rolls" value="10" min="1" max="10000">
                 <button id="simulate-btn">Run Simulation</button>
             </div>
             <canvas id="histogram"></canvas>
