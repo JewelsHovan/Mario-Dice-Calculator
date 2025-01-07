@@ -254,6 +254,9 @@ function updateGameStats() {
     const luckPercentage = ((average - expectedValue) / expectedValue * 100).toFixed(1);
     const isLucky = average > expectedValue;
 
+    // Calculate total movement
+    const totalMovement = adjustedRolls.reduce((a, b) => a + b, 0);
+
     // Display luck statistics
     const stats = {
         'Total Rolls': gameRolls.length,
@@ -261,7 +264,8 @@ function updateGameStats() {
         'Expected Value': expectedValue.toFixed(2),
         'Luck Rating': `${isLucky ? '+' : ''}${luckPercentage}%`,
         'Highest Roll': Math.max(...adjustedRolls),
-        'Lowest Roll': Math.min(...gameRolls)
+        'Lowest Roll': Math.min(...gameRolls),
+        'Total Movement': totalMovement
     };
 
     Object.entries(stats).forEach(([label, value]) => {
