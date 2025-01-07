@@ -197,10 +197,27 @@ function addGameRoll() {
         return;
     }
 
-    const rolls = characterDiceRolls[selectedCharacter];
-    const roll = rolls[Math.floor(Math.random() * rolls.length)];
-    gameRolls.push(roll);
-    updateGameStats();
+    const currentRolls = characterDiceRolls[selectedCharacter];
+
+    // Create a container for the dice buttons
+    const diceButtonContainer = document.createElement('div');
+    diceButtonContainer.className = 'dice-button-container';
+
+    // Create buttons for each possible roll
+    currentRolls.forEach(roll => {
+        const button = document.createElement('button');
+        button.className = 'dice-roll-button';
+        button.textContent = roll;
+        button.onclick = () => {
+            gameRolls.push(roll);
+            updateGameStats();
+            document.body.removeChild(diceButtonContainer); // Remove the buttons after selection
+        };
+        diceButtonContainer.appendChild(button);
+    });
+
+    // Append the button container to the body
+    document.body.appendChild(diceButtonContainer);
 }
 
 // Reset game tracking

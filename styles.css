@@ -222,3 +222,58 @@ canvas {
     border-radius: 5px;
     padding: 10px;
 }
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.modal-buttons {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.modal-buttons button {
+    margin-left: 10px;
+}
+
+.dice-button-container {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+.dice-roll-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dice-roll-button:hover {
+    background-color: #45a049;
+}
