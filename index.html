@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Dice Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Mario Dice Calculator</h1>
+        
+        <div class="character-select">
+            <h2>Select Character</h2>
+            <div id="character-grid"></div>
+        </div>
+
+        <div class="stats-container">
+            <div class="dice-display">
+                <h2>Character Dice</h2>
+                <div id="dice-values"></div>
+            </div>
+
+            <div class="statistics">
+                <h2>Statistics</h2>
+                <div id="stats-values"></div>
+            </div>
+        </div>
+
+        <div class="game-tracker">
+            <h2>Game Roll Tracker</h2>
+            <div class="tracker-controls">
+                <button id="add-roll-btn">Add Current Roll</button>
+                <button id="reset-tracker-btn">Reset Tracker</button>
+            </div>
+            <div class="tracker-stats">
+                <div id="luck-stats"></div>
+                <div id="roll-history"></div>
+            </div>
+        </div>
+
+        <div class="simulation-container">
+            <h2>Simulation</h2>
+            <div class="simulation-controls">
+                <label for="num-rolls">Number of Rolls:</label>
+                <input type="number" id="num-rolls" value="100" min="1" max="10000">
+                <button id="simulate-btn">Run Simulation</button>
+            </div>
+            <canvas id="histogram"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
