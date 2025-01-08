@@ -431,3 +431,53 @@ canvas {
         transform: translate(-50%, -50%);
     }
 }
+
+.intro-section {
+    background-color: #FFFACD;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #DAA520;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.instructions {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.instructions h3 {
+    color: #000080;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.instructions ol {
+    margin-left: 20px;
+    color: #444;
+}
+
+.instructions li {
+    margin-bottom: 8px;
+}
+
+@media screen and (max-width: 480px) {
+    .intro-section {
+        padding: 15px;
+    }
+    
+    .intro-text {
+        font-size: 1rem;
+    }
+    
+    .instructions {
+        padding: 12px;
+    }
+}
