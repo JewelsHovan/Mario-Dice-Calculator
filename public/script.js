@@ -73,6 +73,9 @@ function selectCharacter(character) {
 
     // Remove highlight after selection
     removeHighlight();
+
+    // Reset to 'Add Current Roll' button
+    resetToOriginalButton();
 }
 
 // Calculate and display statistics
@@ -208,17 +211,18 @@ let gameRolls = [];
 // Track a new roll
 function addGameRoll() {
     if (!selectedCharacter) {
-        alert('Please select a character first!');
+        showCustomPopup('Please select a character first!');
         return;
     }
 
     const currentRolls = characterDiceRolls[selectedCharacter];
+    const trackerControls = document.querySelector('.tracker-controls');
+    const addRollButton = document.getElementById('add-roll-btn');
 
-    // Create a container for the dice buttons
+    // Create a container for the dice buttons that will replace the Add Roll button
     const diceButtonContainer = document.createElement('div');
     diceButtonContainer.className = 'dice-button-container';
 
-    // Create buttons for each possible roll
     currentRolls.forEach(roll => {
         const button = document.createElement('button');
         button.className = 'dice-roll-button';
@@ -226,19 +230,29 @@ function addGameRoll() {
         button.onclick = () => {
             gameRolls.push(roll);
             updateGameStats();
-            document.body.removeChild(diceButtonContainer); // Remove the buttons after selection
+            // Replace dice buttons with original Add Roll button
+            diceButtonContainer.replaceWith(addRollButton);
         };
         diceButtonContainer.appendChild(button);
     });
 
-    // Append the button container to the body
-    document.body.appendChild(diceButtonContainer);
+    // Replace the Add Roll button with dice buttons
+    addRollButton.replaceWith(diceButtonContainer);
 }
 
 // Reset game tracking
 function resetGameTracker() {
     gameRolls = [];
     updateGameStats();
+
+    // Remove dice button container if it exists
+    const existingDiceButtonContainer = document.querySelector('.dice-button-container');
+    if (existingDiceButtonContainer) {
+        existingDiceButtonContainer.parentNode.removeChild(existingDiceButtonContainer);
+    }
+
+    // Reset to 'Add Current Roll' button
+    resetToOriginalButton();
 }
 
 // Update game statistics
@@ -315,6 +329,40 @@ function updateGameStats() {
         `;
         rollHistory.appendChild(entry);
     });
+}
+
+// Function to show a custom popup
+function showCustomPopup(message) {
+    // Create the popup container
+    const popupContainer = document.createElement('div');
+    popupContainer.className = 'custom-popup';
+
+    // Create the message element
+    const messageElement = document.createElement('p');
+    messageElement.textContent = message;
+    messageElement.className = 'popup-message';
+
+    // Add the message to the popup
+    popupContainer.appendChild(messageElement);
+
+    // Add the popup to the body
+    document.body.appendChild(popupContainer);
+
+    // Remove the popup after a few seconds
+    setTimeout(() => {
+        document.body.removeChild(popupContainer);
+    }, 3000);
+}
+
+// Helper function to reset to the original 'Add Current Roll' button
+function resetToOriginalButton() {
+    const addRollButton = document.getElementById('add-roll-btn');
+    addRollButton.style.display = 'block'; // Show the button
+
+    const diceButtonContainer = document.querySelector('.dice-button-container');
+    if (diceButtonContainer) {
+        diceButtonContainer.parentNode.removeChild(diceButtonContainer); // Remove dice buttons
+    }
 }
 
 // Event listeners
