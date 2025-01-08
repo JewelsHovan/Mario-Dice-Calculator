@@ -217,9 +217,14 @@ function addGameRoll() {
 
     const currentRolls = characterDiceRolls[selectedCharacter];
     const trackerControls = document.querySelector('.tracker-controls');
-    const addRollButton = document.getElementById('add-roll-btn');
 
-    // Create a container for the dice buttons that will replace the Add Roll button
+    // Remove existing dice button container if it exists
+    const existingContainer = document.querySelector('.dice-button-container');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+
+    // Create a container for the dice buttons
     const diceButtonContainer = document.createElement('div');
     diceButtonContainer.className = 'dice-button-container';
 
@@ -230,14 +235,13 @@ function addGameRoll() {
         button.onclick = () => {
             gameRolls.push(roll);
             updateGameStats();
-            // Replace dice buttons with original Add Roll button
-            diceButtonContainer.replaceWith(addRollButton);
+            diceButtonContainer.remove(); // Remove the dice buttons after selection
         };
         diceButtonContainer.appendChild(button);
     });
 
-    // Replace the Add Roll button with dice buttons
-    addRollButton.replaceWith(diceButtonContainer);
+    // Insert the dice buttons container after the tracker controls
+    trackerControls.insertAdjacentElement('afterend', diceButtonContainer);
 }
 
 // Reset game tracking
@@ -248,11 +252,8 @@ function resetGameTracker() {
     // Remove dice button container if it exists
     const existingDiceButtonContainer = document.querySelector('.dice-button-container');
     if (existingDiceButtonContainer) {
-        existingDiceButtonContainer.parentNode.removeChild(existingDiceButtonContainer);
+        existingDiceButtonContainer.remove();
     }
-
-    // Reset to 'Add Current Roll' button
-    resetToOriginalButton();
 }
 
 // Update game statistics
@@ -352,17 +353,6 @@ function showCustomPopup(message) {
     setTimeout(() => {
         document.body.removeChild(popupContainer);
     }, 3000);
-}
-
-// Helper function to reset to the original 'Add Current Roll' button
-function resetToOriginalButton() {
-    const addRollButton = document.getElementById('add-roll-btn');
-    addRollButton.style.display = 'block'; // Show the button
-
-    const diceButtonContainer = document.querySelector('.dice-button-container');
-    if (diceButtonContainer) {
-        diceButtonContainer.parentNode.removeChild(diceButtonContainer); // Remove dice buttons
-    }
 }
 
 // Event listeners
