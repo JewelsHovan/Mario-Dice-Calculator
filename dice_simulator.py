@@ -1,7 +1,7 @@
-import random
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import binom
+import secrets
 
 class DiceSimulator:
     def __init__(self, dice_rolls):
@@ -15,7 +15,7 @@ class DiceSimulator:
         Args:
             num_simulations (int): The number of simulations to run.
         """
-        self.results = [random.choice(self.dice_rolls) for _ in range(num_simulations)]
+        self.results = [secrets.choice(self.dice_rolls) for _ in range(num_simulations)]
 
     def visualize_histogram(self):
         """
