@@ -84,18 +84,21 @@ function updateStatistics(character) {
     const adjustedRolls = rolls.map(roll => roll > 0 ? roll : 0);
     
     const stats = {
-        'Expected Value': (adjustedRolls.reduce((a, b) => a + b, 0) / adjustedRolls.length).toFixed(2),
-        'Variance': calculateVariance(adjustedRolls).toFixed(2),
-        'Standard Deviation': Math.sqrt(calculateVariance(adjustedRolls)).toFixed(2),
-        'Median': calculateMedian(adjustedRolls),
-        'Mode': calculateMode(adjustedRolls),
-        'Prob. Roll ≥ 4': (calculateProbabilityAtLeast(adjustedRolls, 4) * 100).toFixed(1) + '%',
-        'Prob. Roll ≤ 2': (calculateProbabilityAtMost(adjustedRolls, 2) * 100).toFixed(1) + '%'
+        '📊 Expected Value': (adjustedRolls.reduce((a, b) => a + b, 0) / adjustedRolls.length).toFixed(2),
+        '📈 Variance': calculateVariance(adjustedRolls).toFixed(2),
+        '📏 Standard Deviation': Math.sqrt(calculateVariance(adjustedRolls)).toFixed(2),
+        '🎯 Median': calculateMedian(adjustedRolls),
+        '🔢 Mode': calculateMode(adjustedRolls),
+        '✅ Prob. Roll ≥ 4': (calculateProbabilityAtLeast(adjustedRolls, 4) * 100).toFixed(1) + '%',
+        '⚠️ Prob. Roll ≤ 2': (calculateProbabilityAtMost(adjustedRolls, 2) * 100).toFixed(1) + '%'
     };
 
     const statsContainer = document.getElementById('stats-values');
     statsContainer.innerHTML = '';
     Object.entries(stats).forEach(([label, value]) => {
+        const statRow = document.createElement('div');
+        statRow.className = 'stat-row';
+        
         const labelDiv = document.createElement('div');
         labelDiv.className = 'stat-label';
         labelDiv.textContent = label + ':';
@@ -104,8 +107,9 @@ function updateStatistics(character) {
         valueDiv.className = 'stat-value';
         valueDiv.textContent = value;
         
-        statsContainer.appendChild(labelDiv);
-        statsContainer.appendChild(valueDiv);
+        statRow.appendChild(labelDiv);
+        statRow.appendChild(valueDiv);
+        statsContainer.appendChild(statRow);
     });
 }
 
@@ -141,7 +145,10 @@ function calculateProbabilityAtMost(rolls, x) {
 
 // Simulation functions
 function simulateRolls(numRolls) {
-    if (!selectedCharacter) return;
+    if (!selectedCharacter) {
+        showCustomPopup('Please select a character first!');
+        return;
+    }
     
     const rolls = characterDiceRolls[selectedCharacter];
     const results = Array(numRolls).fill(0).map(() => {
@@ -173,32 +180,83 @@ function updateHistogram(results) {
             datasets: [{
                 label: 'Frequency',
                 data: data,
-                backgroundColor: 'rgba(76, 175, 80, 0.6)',
-                borderColor: 'rgba(76, 175, 80, 1)',
-                borderWidth: 1
+                backgroundColor: labels.map(label => {
+                    const value = parseInt(label);
+                    if (value < 0) return 'rgba(230, 0, 18, 0.6)'; // Red for negative
+                    if (value === 0) return 'rgba(109, 117, 125, 0.6)'; // Gray for zero
+                    if (value <= 3) return 'rgba(251, 208, 0, 0.6)'; // Yellow for low
+                    if (value <= 6) return 'rgba(4, 156, 219, 0.6)'; // Blue for medium
+                    return 'rgba(67, 176, 71, 0.6)'; // Green for high
+                }),
+                borderColor: labels.map(label => {
+                    const value = parseInt(label);
+                    if (value < 0) return 'rgba(230, 0, 18, 1)';
+                    if (value === 0) return 'rgba(109, 117, 125, 1)';
+                    if (value <= 3) return 'rgba(251, 208, 0, 1)';
+                    if (value <= 6) return 'rgba(4, 156, 219, 1)';
+                    return 'rgba(67, 176, 71, 1)';
+                }),
+                borderWidth: 2,
+                borderRadius: 8
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Frequency'
+                        text: 'Frequency',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Roll Value'
+                        text: 'Roll Value',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        display: false
                     }
                 }
             },
             plugins: {
                 title: {
                     display: true,
-                    text: 'Dice Roll Distribution'
+                    text: 'Dice Roll Distribution',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    borderRadius: 8,
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.parsed.y;
+                            const percentage = ((value / results.length) * 100).toFixed(1);
+                            return `Count: ${value} (${percentage}%)`;
+                        }
+                    }
                 }
             }
         }
@@ -355,9 +413,79 @@ function showCustomPopup(message) {
     }, 3000);
 }
 
+// Initialize empty histogram
+function initializeEmptyHistogram() {
+    const ctx = document.getElementById('histogram').getContext('2d');
+    
+    histogramChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Frequency',
+                data: [],
+                backgroundColor: 'rgba(4, 156, 219, 0.6)',
+                borderColor: 'rgba(4, 156, 219, 1)',
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Frequency',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Roll Value',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Select a character and run simulation',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    padding: 20
+                },
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     initializeCharacterGrid();
+    
+    // Initialize empty histogram
+    initializeEmptyHistogram();
     
     // Highlight character selection on load
     highlightCharacterSelection();

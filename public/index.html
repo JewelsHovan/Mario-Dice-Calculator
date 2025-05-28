@@ -18,11 +18,17 @@
     <!-- Additional Meta Tags -->
     <meta name="author" content="Dice Block Doctor">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#87CEEB">
+    <meta name="theme-color" content="#E60012">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://diceblockdoctor.netlify.app/">
     
+    <!-- Font Imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="palette.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -80,7 +86,9 @@
                 <input type="number" id="num-rolls" value="10" min="1" max="10000">
                 <button id="simulate-btn">Run Simulation</button>
             </div>
-            <canvas id="histogram"></canvas>
+            <div class="chart-container">
+                <canvas id="histogram"></canvas>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
